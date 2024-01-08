@@ -1,13 +1,14 @@
-// index.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const transporter = require('./mailer'); // Import your mailer configuration
+const nodemailer = require('nodemailer');
+const cors = require('cors'); // Import the cors middleware
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.use(cors()); // Use cors middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // Handle form submissions
 app.post('/send-email', (req, res) => {
@@ -29,5 +30,5 @@ app.post('/send-email', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+    console.log(`Server is running on port ${port}`);
+  });
