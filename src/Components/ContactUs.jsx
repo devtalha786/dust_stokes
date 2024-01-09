@@ -2,67 +2,6 @@ import React, { useState, useEffect } from 'react';
 import One from '../images/first.jpeg';
 
 export default function ContactUs() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [formErrors, setFormErrors] = useState({});
-
-  useEffect(() => {
-    console.log("useEffect triggered");
-    if (submitSuccess) {
-      // Clear the form after a successful submission
-      console.log("Clearing form");
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
-      });
-  
-      // Reset submitSuccess to false for the next form submission
-      setSubmitSuccess(false);
-    }
-  }, [submitSuccess, formData]);
-  
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  
-
-  const apiUrl = 'https://dust-stokes.vercel.app/api/send-email'; // Adjust the port if necessary
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const result = await response.json();
-  
-      if (result.success) {
-        // Handle success (e.g., show a success message)
-        console.log('Email sent successfully');
-      } else {
-        // Handle failure (e.g., show an error message)
-        console.error(result.message);
-      }
-    } catch (error) {
-      console.error('Error sending email:', error.message);
-    }
-  };
   
  return (
     <div className="mt-[140px] w-full">
@@ -73,7 +12,7 @@ export default function ContactUs() {
             Our doors are always open to provide you with quality NFT.
           </p>
 
-          <form className="max-w-lg mx-auto py-3 text-white w-full" onSubmit={handleSubmit}>
+          <form className="max-w-lg mx-auto py-3 text-white w-full" >
             <div className="mb-4">
               <label htmlFor="name" className="block text-sm font-bold mb-2">
                 Your Name
@@ -84,7 +23,7 @@ export default function ContactUs() {
                 name="name"
                 placeholder="Your Name"
                 className="w-full px-3 py-2 text-black border border-gray-300 rounded focus:outline-none focus:border-[#E8D682]"
-                onChange={handleChange}
+                
               />
             </div>
 
@@ -98,7 +37,7 @@ export default function ContactUs() {
                 name="email"
                 placeholder="Your Email"
                 className="w-full px-3 py-2 text-black border border-gray-300 rounded focus:outline-none focus:border-[#E8D682]"
-                onChange={handleChange}
+                
               />
             </div>
 
@@ -112,21 +51,18 @@ export default function ContactUs() {
                 rows="3"
                 placeholder="Your Message"
                 className="w-full px-3 py-2 text-black border border-gray-300 rounded resize-none focus:outline-none focus:border-[#E8D682]"
-                onChange={handleChange}
+                
               ></textarea>
             </div>
 
-            {formErrors.message && (
-              <div className="text-red-500 mb-2">{formErrors.message}</div>
-            )}
+        
 
             <div className="mb-4">
               <button
                 type="submit"
                 className="w-full bg-[#E8D682] text-[#070A0B] font-semibold py-2 rounded hover:bg-[#D9C261] transition duration-300"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit'}
+              Submit
               </button>
             </div>
           </form>
