@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import One from '../images/first.jpeg';
 
 export default function ContactUs() {
@@ -7,6 +7,26 @@ export default function ContactUs() {
     email: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    console.log("useEffect triggered");
+    if (submitSuccess) {
+      // Clear the form after a successful submission
+      console.log("Clearing form");
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+      });
+  
+      // Reset submitSuccess to false for the next form submission
+      setSubmitSuccess(false);
+    }
+  }, [submitSuccess, formData]);
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -17,29 +37,44 @@ export default function ContactUs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('https://dust-stokes.vercel.app/api/send-email', {
+      setIsSubmitting(true);
+  
+      const response = await fetch('http://localhost:3001/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-
+  
       const result = await response.json();
-
+  
       if (result.success) {
-        // Handle success (e.g., show a success message)
-        console.log('Email sent successfully');
+        setSubmitSuccess(true);
+        setFormErrors({});
+        setFormData({
+          name: '',
+          email: '',
+          message: '',
+        });
+  
+        // Reload the page after a successful submission
+        window.location.reload();
       } else {
-        // Handle failure (e.g., show an error message)
+        setFormErrors({ message: result.message });
         console.error(result.message);
       }
     } catch (error) {
+      setFormErrors({ message: 'Error sending email' });
       console.error('Error sending email:', error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  
+  
 
   return (
     <div className="mt-[140px] w-full">
@@ -93,19 +128,19 @@ export default function ContactUs() {
               ></textarea>
             </div>
 
-            <div className="mb-4">
-              <input type="checkbox" id="policy" name="policy" className="mr-2" />
-              <label htmlFor="policy" className="text-gray-700 text-sm">
-                I agree to the privacy policy
-              </label>
-            </div>
+            {formErrors.message && (
+              <div className="text-red-500 mb-2">{formErrors.message}</div>
+            )}
 
-            <button
-              type="submit"
-              className="w-full bg-[#E8D682] text-[#070A0B] font-semibold py-2 rounded hover:bg-[#D9C261] transition duration-300"
-            >
-              Submit
-            </button>
+            <div className="mb-4">
+              <button
+                type="submit"
+                className="w-full bg-[#E8D682] text-[#070A0B] font-semibold py-2 rounded hover:bg-[#D9C261] transition duration-300"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit'}
+              </button>
+            </div>
           </form>
         </div>
         <div className="p-6 rounded-xl">
