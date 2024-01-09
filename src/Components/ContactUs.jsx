@@ -34,14 +34,15 @@ export default function ContactUs() {
       [e.target.name]: e.target.value,
     });
   };
+  
+
+  const apiUrl = 'https://dust-stokes.vercel.app/api/send-email'; // Adjust the port if necessary
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
-      setIsSubmitting(true);
-  
-      const response = await fetch('https://dust-stokes.vercel.app/api/send-email', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,31 +53,18 @@ export default function ContactUs() {
       const result = await response.json();
   
       if (result.success) {
-        setSubmitSuccess(true);
-        setFormErrors({});
-        setFormData({
-          name: '',
-          email: '',
-          message: '',
-        });
-  
-        // Reload the page after a successful submission
-        window.location.reload();
+        // Handle success (e.g., show a success message)
+        console.log('Email sent successfully');
       } else {
-        setFormErrors({ message: result.message });
+        // Handle failure (e.g., show an error message)
         console.error(result.message);
       }
     } catch (error) {
-      setFormErrors({ message: 'Error sending email' });
       console.error('Error sending email:', error.message);
-    } finally {
-      setIsSubmitting(false);
     }
   };
   
-  
-
-  return (
+ return (
     <div className="mt-[140px] w-full">
       <main className="bg-[#070A0B] w-full h-auto flex justify-between lg:flex-row flex-col gap-y-8" id="contact-main">
         <div className="px-[10px] md:px-[50px] w-full" id="touch-us">

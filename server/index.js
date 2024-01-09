@@ -1,15 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const cors = require('cors');
+const cors = require('cors'); // Import the cors middleware
+
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors({
-  origin: 'https://dust-stokes.vercel.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}));
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
