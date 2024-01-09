@@ -41,7 +41,7 @@ export default function ContactUs() {
     try {
       setIsSubmitting(true);
   
-      const response = await fetch('https://dust-stokes.vercel.app/send-email', {
+      const response = await fetch('https://dust-stokes.vercel.app/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
